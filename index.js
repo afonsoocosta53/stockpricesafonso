@@ -279,6 +279,7 @@ dividendInfo = (req, res) => {
   var profile = function () {
     var promise = new Promise(function (resolve, reject) {
       console.log(req);
+      resolve();
     });
     return promise;
   };
