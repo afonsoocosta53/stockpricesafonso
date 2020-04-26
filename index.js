@@ -3,9 +3,14 @@ const path = require("path");
 const PORT = process.env.PORT || 5000;
 const rp = require("request-promise");
 const $ = require("cheerio");
+const cors = require('cors');
+var bodyParser = require('body-parser');
 
 express()
   .use(express.static(path.join(__dirname, "public")))
+  .use(cors())
+  .use(bodyParser.urlencoded({ extended: true }))
+  .use(bodyParser.json())
   .set("views", path.join(__dirname, "views"))
   .set("view engine", "ejs")
   .get("/", (req, res) => res.render("pages/index"))
@@ -279,7 +284,6 @@ dividendInfo = (req, res) => {
   var profile = function () {
     var promise = new Promise(function (resolve, reject) {
       console.log(req.body);
-      console.log(req.payload);
       resolve();
     });
     return promise;
