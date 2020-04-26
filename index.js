@@ -13,7 +13,7 @@ express()
   .get("/stockInfo2", (req, res) => showTimes2(req, res))
   .get("/stockInfo3", (req, res) => showTimes3(req, res))
   .get("/price", (req, res) => price(req, res))
-  .get("/dividendInfo", (req, res) => dividendInfo(req, res))
+  .post("/dividendInfo", (req, res) => dividendInfo(req, res))
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 showTimes = (req, res) => {
