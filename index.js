@@ -13,6 +13,7 @@ express()
   .get("/stockInfo2", (req, res) => showTimes2(req, res))
   .get("/stockInfo3", (req, res) => showTimes3(req, res))
   .get("/price", (req, res) => price(req, res))
+  .get("/dividendInfo", (req, res) => dividendInfo(req, res))
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 showTimes = (req, res) => {
@@ -256,6 +257,28 @@ price = (req, res) => {
         .catch(function (err) {
           resolve();
         });
+    });
+    return promise;
+  };
+
+  profile()
+    .then(() => {
+      res.json({ status: true, stock: stock });
+    })
+    .catch((e) => {
+      console.log(e);
+      res.status(400).json({ status: "error" });
+    });
+};
+
+dividendInfo = (req, res) => {
+  var ticker = req.query.ticker;
+  var stock = {};
+  var url;
+
+  var profile = function () {
+    var promise = new Promise(function (resolve, reject) {
+      console.log(req);
     });
     return promise;
   };
