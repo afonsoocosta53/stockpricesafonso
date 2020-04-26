@@ -3,8 +3,8 @@ const path = require("path");
 const PORT = process.env.PORT || 5000;
 const rp = require("request-promise");
 const $ = require("cheerio");
-const cors = require('cors');
-var bodyParser = require('body-parser');
+const cors = require("cors");
+var bodyParser = require("body-parser");
 
 express()
   .use(express.static(path.join(__dirname, "public")))
@@ -277,13 +277,31 @@ price = (req, res) => {
 };
 
 dividendInfo = (req, res) => {
-  var ticker = req.query.ticker;
   var stock = {};
-  var url;
+  console.log(req.body);
+  var dates = req.body.dates;
+  var companies = req.body.companies;
+  var ticker = req.body.ticker;
+  var date = new Date(req.body.date);
+
+  var yearDate = date.getUTCFullYear();
+  var monthDate = date.getUTCMonth() + 1; //months from 1-12
 
   var profile = function () {
     var promise = new Promise(function (resolve, reject) {
-      console.log(req.body);
+      for (const index in dates) {
+        var date = new Date(dates[index]);
+        var yearTemp = date.getUTCFullYear();
+        var monthTemp = date.getUTCMonth() + 1;
+        if (yearDate === yearTemp && monthDate === monthTemp) {
+          stock.indexDate = index;
+        }
+      }
+      for (const index in companies) {
+        if (companies[index] === ticker) {
+          stock.indexCompany = index;
+        }
+      }
       resolve();
     });
     return promise;
