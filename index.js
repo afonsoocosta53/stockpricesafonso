@@ -17,6 +17,7 @@ express()
   .get("/stockInfo", (req, res) => showTimes(req, res))
   .get("/stockInfo2", (req, res) => showTimes2(req, res))
   .get("/stockInfo3", (req, res) => showTimes3(req, res))
+  .get("/stockInfo4", (req, res) => showTimes4(req, res))
   .get("/price", (req, res) => price(req, res))
   .post("/dividendInfo", (req, res) => dividendInfo(req, res))
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
@@ -303,6 +304,47 @@ dividendInfo = (req, res) => {
         }
       }
       resolve();
+    });
+    return promise;
+  };
+
+  profile()
+    .then(() => {
+      res.json({ status: true, stock: stock });
+    })
+    .catch((e) => {
+      console.log(e);
+      res.status(400).json({ status: "error" });
+    });
+};
+
+showTimes4 = (req, res) => {
+  var ticker = req.query.ticker;
+  var exchange =
+    req.query.exchange === "USA-NYSE"
+      ? "NYSE"
+      : req.query.exchange === "USA-NASDAQ"
+      ? "NASDAQ"
+      : exchange;
+  var stock = {};
+  var url;
+
+  var profile = function () {
+    var promise = new Promise(function (resolve, reject) {
+      url = "https://www.marketbeat.com/stocks/" + exchange + "/" + ticker;
+      rp({ url: url, jar: true })
+        .then(function (html) {
+          $("a", html).each(function (index, element) {
+            var elementText = $(this).text();
+            if (elementText === "Price / Book") {
+              stock.PB = $(this).next().text();
+            }
+          });
+          resolve();
+        })
+        .catch(function (err) {
+          resolve();
+        });
     });
     return promise;
   };
